@@ -54,7 +54,7 @@ export class TransportAPI {
         ...departure,
         id: `${departure.stop.departure}-${departure.category}-${departure.number}`,
         passList: departure.passList?.map((stop: any) => ({
-          name: stop.station?.name || stop.location?.name || 'Unknown Station',
+          name: stop.station?.name || stop.location?.name || stop.name || 'Station',
           arrival: stop.arrival,
           departure: stop.departure,
           platform: stop.platform,

@@ -130,13 +130,13 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
         </div>
       ) : (
         <div className="space-y-3">
-          {departures.map((departure) => (
-            <DepartureCard
-              key={departure.id}
-              departure={departure}
-              onClick={() => handleDepartureClick(departure)}
-            />
-          ))}
+            {departures.map((departure, index) => (
+              <DepartureCard
+                key={`${departure.id}-${index}`}
+                departure={departure}
+                onClick={() => handleDepartureClick(departure)}
+              />
+            ))}
         </div>
       )}
     </div>

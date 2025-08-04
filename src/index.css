@@ -8,29 +8,31 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Swiss transport inspired colors */
-    --background: 240 10% 98%;
-    --foreground: 224 15% 15%;
+    /* Beachside inspired color palette */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 224 15% 15%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 224 15% 15%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    /* Swiss Red primary theme */
-    --primary: 0 85% 55%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 85% 65%;
+    /* Navy blue as primary */
+    --primary: 210 60% 45%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 200 70% 70%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 224 15% 15%;
+    /* Light green secondary */
+    --secondary: 120 25% 75%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 95%;
-    --accent-foreground: 224 15% 15%;
+    /* Cream accent */
+    --accent: 39 70% 85%;
+    --accent-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;

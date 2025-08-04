@@ -29,20 +29,20 @@ export const DepartureCard = ({ departure, className, onClick }: DepartureCardPr
     if (cat.includes('tram') || cat.includes('t')) {
       const lineNumber = parseInt(number);
       switch (lineNumber) {
-        case 2: return 'bg-red-600 text-white';
-        case 3: return 'bg-green-700 text-white';
-        case 4: return 'bg-blue-900 text-white';
-        case 5: return 'bg-amber-800 text-white';
-        case 6: return 'bg-orange-600 text-white';
-        case 7: return 'bg-black text-white';
-        case 8: return 'bg-green-500 text-white';
-        case 9: return 'bg-indigo-600 text-white';
-        case 10: return 'bg-pink-500 text-white';
-        case 11: return 'bg-green-600 text-white';
-        case 13: return 'bg-yellow-400 text-black';
-        case 14: return 'bg-sky-400 text-white';
-        case 15: return 'bg-red-600 text-white';
-        case 17: return 'bg-fuchsia-600 text-white';
+        case 2: return 'bg-[#E60012] text-white';
+        case 3: return 'bg-[#228B22] text-white';
+        case 4: return 'bg-[#1F1F8B] text-white';
+        case 5: return 'bg-[#8B4513] text-white';
+        case 6: return 'bg-[#D2691E] text-white';
+        case 7: return 'bg-[#000000] text-white';
+        case 8: return 'bg-[#32CD32] text-white';
+        case 9: return 'bg-[#6A5ACD] text-white';
+        case 10: return 'bg-[#FF69B4] text-white';
+        case 11: return 'bg-[#228B22] text-white';
+        case 13: return 'bg-[#FFD700] text-black';
+        case 14: return 'bg-[#87CEEB] text-white';
+        case 15: return 'bg-[#E60012] text-white';
+        case 17: return 'bg-[#DA70D6] text-white';
         default: return 'bg-transport-tram text-white';
       }
     }
