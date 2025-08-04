@@ -64,39 +64,12 @@ export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
   };
 
   useEffect(() => {
-    const fetchRouteStops = async () => {
-      setLoading(true);
-      try {
-        // For now, create a mock implementation since the API might not have detailed route info
-        // In a real implementation, you'd call something like:
-        // const routeStops = await TransportAPI.fetchRouteStops(departure.category, departure.number, departure.stop.departure);
-        
-        // Mock data for demonstration - in production, replace with actual API call
-        const mockStops: RouteStop[] = [
-          {
-            name: "Current Station",
-            departure: departure.stop.departure,
-            arrival: departure.stop.departure,
-            platform: departure.stop.platform
-          },
-          // Add more mock stops here based on common Zurich routes
-        ];
-        
-        setStops(mockStops);
-      } catch (error) {
-        console.error('Error fetching route stops:', error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch route information. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRouteStops();
-  }, [departure, toast]);
+    setLoading(true);
+    // Use the passList from the departure data
+    const routeStops = departure.passList || [];
+    setStops(routeStops);
+    setLoading(false);
+  }, [departure]);
 
   return (
     <div className="space-y-4">
@@ -138,42 +111,52 @@ export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
             <span>Loading route information...</span>
           </div>
         </div>
+      ) : stops.length === 0 ? (
+        <div className="text-center py-8">
+          <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+          <p className="text-muted-foreground text-sm">
+            No route information available for this departure.
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-primary rounded-full flex-shrink-0"></div>
-                  <div>
-                    <p className="font-medium text-foreground">Current Station</p>
-                    {departure.stop.platform && (
-                      <p className="text-sm text-muted-foreground">
-                        Platform {departure.stop.platform}
-                      </p>
-                    )}
+          {stops.map((stop, index) => (
+            <Card key={index}>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                      index === 0 ? 'bg-primary' : 'bg-muted-foreground'
+                    }`}></div>
+                    <div>
+                      <p className="font-medium text-foreground">{stop.name}</p>
+                      {stop.platform && (
+                        <p className="text-sm text-muted-foreground">
+                          Platform {stop.platform}
+                        </p>
+                      )}
+                      {stop.delay && stop.delay > 0 && (
+                        <p className="text-sm text-destructive">
+                          +{stop.delay} min delay
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium text-foreground">
+                      {stop.departure 
+                        ? (getMinutesFromNow(stop.departure) === 0 ? 'Now' : `${getMinutesFromNow(stop.departure)}min`)
+                        : stop.arrival 
+                        ? (getMinutesFromNow(stop.arrival) === 0 ? 'Now' : `${getMinutesFromNow(stop.arrival)}min`)
+                        : '-'
+                      }
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium text-foreground">
-                    {getMinutesFromNow(departure.stop.departure) === 0 ? 'Now' : `${getMinutesFromNow(departure.stop.departure)}min`}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Note about route information */}
-          <div className="text-center py-8">
-            <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-muted-foreground text-sm">
-              Route stop information is coming soon!
-            </p>
-            <p className="text-muted-foreground text-xs mt-1">
-              This feature will show all upcoming stops with precise timing.
-            </p>
-          </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
     </div>

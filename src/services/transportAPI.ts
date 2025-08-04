@@ -52,7 +52,14 @@ export class TransportAPI {
       
       return data.stationboard.map(departure => ({
         ...departure,
-        id: `${departure.stop.departure}-${departure.category}-${departure.number}`
+        id: `${departure.stop.departure}-${departure.category}-${departure.number}`,
+        passList: departure.passList?.map((stop: any) => ({
+          name: stop.station?.name || stop.location?.name || 'Unknown Station',
+          arrival: stop.arrival,
+          departure: stop.departure,
+          platform: stop.platform,
+          delay: stop.delay
+        })) || []
       }));
     } catch (error) {
       console.error('Error fetching departures:', error);

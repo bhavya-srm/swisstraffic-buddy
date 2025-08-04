@@ -25,6 +25,7 @@ export interface Departure {
     delay?: number;
   };
   operator?: string;
+  passList?: RouteStop[];
 }
 
 export interface DepartureResponse {
