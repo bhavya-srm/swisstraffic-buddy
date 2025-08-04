@@ -1,3 +1,4 @@
+
 export interface Station {
   id: string;
   name: string;
@@ -28,6 +29,14 @@ export interface Departure {
 
 export interface DepartureResponse {
   stationboard: Departure[];
+}
+
+export interface RouteStop {
+  name: string;
+  arrival?: string;
+  departure?: string;
+  platform?: string;
+  delay?: number;
 }
 
 export type TransportType = 'train' | 'bus' | 'tram' | 'ship' | 'cableway';

@@ -1,7 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DepartureCard } from './DepartureCard';
+import { RouteStopsView } from './RouteStopsView';
 import { TransportAPI } from '@/services/transportAPI';
 import { useToast } from '@/hooks/use-toast';
 import type { Station, Departure } from '@/types/transport';
@@ -13,6 +15,7 @@ interface DeparturesListProps {
 
 export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
   const [departures, setDepartures] = useState<Departure[]>([]);
+  const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { toast } = useToast();
@@ -54,6 +57,24 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
   const handleRefresh = () => {
     fetchDepartures(true);
   };
+
+  const handleDepartureClick = (departure: Departure) => {
+    setSelectedDeparture(departure);
+  };
+
+  const handleBackFromRoute = () => {
+    setSelectedDeparture(null);
+  };
+
+  // Show route stops view if a departure is selected
+  if (selectedDeparture) {
+    return (
+      <RouteStopsView
+        departure={selectedDeparture}
+        onBack={handleBackFromRoute}
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -113,6 +134,7 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
             <DepartureCard
               key={departure.id}
               departure={departure}
+              onClick={() => handleDepartureClick(departure)}
             />
           ))}
         </div>

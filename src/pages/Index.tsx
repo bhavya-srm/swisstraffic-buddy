@@ -103,7 +103,7 @@ const Index = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">NextUp</h1>
-            <p className="text-muted-foreground">Swiss public transport departures</p>
+            <p className="text-muted-foreground">Your next connection, simplified</p>
           </div>
           
           <Button
