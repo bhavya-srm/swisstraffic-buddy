@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Search, Menu, AlertCircle, Star } from 'lucide-react';
+import { MapPin, Search, Menu, AlertCircle, Star, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StationCard } from '@/components/StationCard';
 import { DeparturesList } from '@/components/DeparturesList';
 import { SearchSidebar } from '@/components/SearchSidebar';
+import { SettingsSidebar } from '@/components/SettingsSidebar';
 import { LocationService } from '@/services/locationService';
 import { TransportAPI } from '@/services/transportAPI';
 import { useFavoritesStore } from '@/stores/favoritesStore';
@@ -14,6 +15,7 @@ const Index = () => {
   const [nearbyStations, setNearbyStations] = useState<Station[]>([]);
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [showSearch, setShowSearch] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState<string | null>(null);
   
@@ -98,7 +100,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto p-4">
+      <div className="max-w-2xl mx-auto p-4 pt-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -106,15 +108,25 @@ const Index = () => {
             <p className="text-muted-foreground">Ready to go?</p>
           </div>
           
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSearch(true)}
-            className="flex items-center space-x-2"
-          >
-            <Search className="h-4 w-4" />
-            <span>Search</span>
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSearch(true)}
+              className="flex items-center space-x-2"
+            >
+              <Search className="h-4 w-4" />
+              <span>Search</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSettings(true)}
+              className="flex items-center space-x-2"
+            >
+              <Settings className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         {/* Loading State */}
@@ -211,6 +223,12 @@ const Index = () => {
         open={showSearch}
         onOpenChange={setShowSearch}
         onStationSelect={handleStationSelect}
+      />
+
+      {/* Settings Sidebar */}
+      <SettingsSidebar
+        open={showSettings}
+        onOpenChange={setShowSettings}
       />
     </div>
   );
