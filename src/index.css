@@ -30,8 +30,8 @@ All colors MUST be HSL.
     --muted: 210 40% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    /* Cream accent */
-    --accent: 39 70% 85%;
+    /* Yellow accent from Zurich transport colors */
+    --accent: 45 100% 70%;
     --accent-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 84.2% 60.2%;
@@ -39,7 +39,7 @@ All colors MUST be HSL.
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 0 85% 55%;
+    --ring: 45 100% 70%;
 
     /* Transport specific colors */
     --transport-train: 235 85% 55%;
@@ -93,15 +93,15 @@ All colors MUST be HSL.
     --muted: 220 13% 18%;
     --muted-foreground: 220 8.9% 65%;
 
-    --accent: 220 13% 18%;
-    --accent-foreground: 220 14% 96%;
+    --accent: 45 80% 60%;
+    --accent-foreground: 45 20% 10%;
 
     --destructive: 0 62.8% 50%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 220 13% 18%;
     --input: 220 13% 18%;
-    --ring: 0 85% 55%;
+    --ring: 45 80% 60%;
 
     /* Transport colors for dark mode */
     --transport-train: 235 85% 65%;

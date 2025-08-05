@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Clock, MapPin, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,42 +21,38 @@ export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
     const cat = category.toLowerCase();
     const lineNumber = parseInt(number);
     
-    // Zurich tram colors
+    // Zurich tram colors - exact RGB codes from specification
     if (cat.includes('tram') || cat.includes('t')) {
       switch (lineNumber) {
-        case 2: return 'bg-[#E60012] text-white';
-        case 3: return 'bg-[#3BBF70] text-white';
-        case 4: return 'bg-[#45507B] text-white';
-        case 5: return 'bg-[#76247B] text-white';
-        case 6: return 'bg-[#D2691E] text-white';
-        case 7: return 'bg-[#000000] text-white';
-        case 8: return 'bg-[#81C532] text-white';
-        case 9: return 'bg-[#6A5ACD] text-white';
-        case 10: return 'bg-[#E0643C] text-white';
-        case 11: return 'bg-[#3BBF70] text-white';
-        case 13: return 'bg-[#FFD700] text-black';
-        case 14: return 'bg-[#2D646B] text-white';
-        case 15: return 'bg-[#C50000] text-white';
-        case 17: return 'bg-[#A05583] text-white';
+        case 2: case 15: case 304: case 743: return 'bg-[rgb(226,10,22)] text-white';
+        case 3: case 11: case 202: case 760: return 'bg-[rgb(0,137,37)] text-white';
+        case 4: case 9: case 303: case 751: return 'bg-[rgb(17,41,111)] text-white';
+        case 5: case 305: return 'bg-[rgb(115,69,34)] text-white';
+        case 6: case 307: return 'bg-[rgb(202,125,60)] text-white';
+        case 7: return 'bg-[rgb(0,0,0)] text-white';
+        case 8: case 301: case 752: return 'bg-[rgb(138,181,31)] text-white';
+        case 10: case 308: case 748: return 'bg-[rgb(225,36,114)] text-white';
+        case 12: return 'bg-[rgb(94,179,219)] text-white';
+        case 13: case 306: return 'bg-[rgb(255,193,0)] text-black';
+        case 14: case 309: return 'bg-[rgb(0,141,197)] text-white';
+        case 16: return 'bg-[rgb(16,55,82)] text-white';
+        case 17: return 'bg-[rgb(142,34,77)] text-white';
         default: return 'bg-transport-tram text-white';
       }
     }
     
-    // Zurich bus colors
+    // Zurich bus colors - exact RGB codes from specification
     if (cat.includes('bus') || cat.includes('b')) {
       switch (lineNumber) {
-        case 31: return 'bg-[#52855B] text-white';
-        case 32: return 'bg-[#52855B] text-white';
-        case 33: return 'bg-[#615C15] text-white';
-        case 46: return 'bg-[#179915] text-white';
-        case 62: return 'bg-[#7528C5] text-white';
-        case 72: return 'bg-[#7521C5] text-white';
-        case 80: return 'bg-[#52855B] text-white';
-        case 94: return 'bg-[#440542] text-white';
-        case 311: return 'bg-[#D56049] text-white';
-        case 350: return 'bg-[#FFD700] text-black';
-        case 88: return 'bg-[#050048] text-white';
-        default: return 'bg-transport-bus text-white';
+        case 31: return 'bg-[rgb(165,162,198)] text-black';
+        case 32: return 'bg-[rgb(204,178,209)] text-black';
+        case 33: return 'bg-[rgb(218,214,156)] text-black';
+        case 46: return 'bg-[rgb(193,213,159)] text-black';
+        case 62: return 'bg-[rgb(202,192,182)] text-black';
+        case 72: return 'bg-[rgb(198,166,147)] text-black';
+        case 80: return 'bg-[rgb(203,207,179)] text-black';
+        case 94: return 'bg-[rgb(169,163,155)] text-black';
+        default: return 'bg-[rgb(255,255,255)] text-black';
       }
     }
     
@@ -159,19 +154,22 @@ export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      {(() => {
-                        const departureTime = stop.departure ? getMinutesFromNow(stop.departure) : null;
-                        const arrivalTime = stop.arrival ? getMinutesFromNow(stop.arrival) : null;
-                        const time = departureTime !== null ? departureTime : arrivalTime;
-                        
-                        if (time === null) return '-';
-                        return time === 0 ? 'Now' : `${time}min`;
-                      })()}
-                    </span>
-                  </div>
+                  {(() => {
+                    const departureTime = stop.departure ? getMinutesFromNow(stop.departure) : null;
+                    const arrivalTime = stop.arrival ? getMinutesFromNow(stop.arrival) : null;
+                    const time = departureTime !== null ? departureTime : arrivalTime;
+                    
+                    if (time === null || time === 0) return null;
+                    
+                    return (
+                      <div className="flex items-center space-x-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium text-foreground">
+                          {`${time}min`}
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
               </CardContent>
             </Card>

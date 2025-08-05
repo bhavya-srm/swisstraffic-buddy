@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Search, Menu, AlertCircle, Star, Settings } from 'lucide-react';
+import { MapPin, Search, Menu, AlertCircle, Star, Settings, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StationCard } from '@/components/StationCard';
 import { DeparturesList } from '@/components/DeparturesList';
@@ -9,6 +9,8 @@ import { LocationService } from '@/services/locationService';
 import { TransportAPI } from '@/services/transportAPI';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/hooks/useLanguage';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import type { Station } from '@/types/transport';
 
 const Index = () => {
@@ -21,6 +23,7 @@ const Index = () => {
   
   const { favoriteStations, isFavorite } = useFavoritesStore();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   // Fetch nearby stations based on user location
   const fetchNearbyStations = async () => {
@@ -45,8 +48,8 @@ const Index = () => {
       
       if (stations.length === 0) {
         toast({
-          title: "No stations found",
-          description: "No transport stations found within 1km of your location.",
+          title: t('no.stations.found'),
+          description: t('no.stations.description'),
         });
       }
     } catch (error) {
@@ -61,6 +64,12 @@ const Index = () => {
       setLoading(false);
     }
   };
+
+  // Pull to refresh
+  const { containerRef, isRefreshing, pullDistance, isPulling } = usePullToRefresh({
+    onRefresh: fetchNearbyStations,
+    isEnabled: !selectedStation,
+  });
 
   useEffect(() => {
     fetchNearbyStations();
@@ -99,13 +108,35 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto p-4 pt-12">
+    <div 
+      ref={containerRef}
+      className="min-h-screen bg-background overflow-y-auto"
+      style={{
+        paddingTop: isPulling ? `${pullDistance}px` : '0px',
+        transition: isPulling ? 'none' : 'padding-top 0.3s ease',
+      }}
+    >
+      {/* Pull to refresh indicator */}
+      {(isPulling || isRefreshing) && (
+        <div 
+          className="absolute top-0 left-0 right-0 flex items-center justify-center py-4 bg-background/90 backdrop-blur-sm z-10"
+          style={{
+            transform: `translateY(${Math.max(-60, -60 + pullDistance)}px)`,
+          }}
+        >
+          <div className="flex items-center space-x-2 text-muted-foreground">
+            <RotateCcw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>{isRefreshing ? 'Refreshing...' : 'Pull to refresh'}</span>
+          </div>
+        </div>
+      )}
+      
+      <div className="max-w-2xl mx-auto p-4 pt-16">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">NextUp</h1>
-            <p className="text-muted-foreground">Ready to go?</p>
+            <h1 className="text-3xl font-bold text-foreground">{t('app.title')}</h1>
+            <p className="text-muted-foreground">{t('app.subtitle')}</p>
           </div>
           
           <div className="flex items-center space-x-2">
@@ -116,7 +147,7 @@ const Index = () => {
               className="flex items-center space-x-2"
             >
               <Search className="h-4 w-4" />
-              <span>Search</span>
+              <span>{t('search')}</span>
             </Button>
             <Button
               variant="outline"
@@ -134,7 +165,7 @@ const Index = () => {
           <div className="flex items-center justify-center py-12">
             <div className="flex items-center space-x-2 text-muted-foreground">
               <MapPin className="h-5 w-5 animate-pulse" />
-              <span>Finding nearby stations...</span>
+              <span>{t('finding.stations')}</span>
             </div>
           </div>
         ) : locationError ? (
@@ -142,13 +173,13 @@ const Index = () => {
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <AlertCircle className="h-12 w-12 text-destructive mb-4" />
             <h3 className="text-lg font-medium text-foreground mb-2">
-              Location Access Required
+              {t('location.required')}
             </h3>
             <p className="text-muted-foreground max-w-sm mb-4">
               {locationError}
             </p>
             <Button onClick={fetchNearbyStations}>
-              Try Again
+              {t('try.again')}
             </Button>
           </div>
         ) : (
@@ -160,7 +191,7 @@ const Index = () => {
                 <div className="flex items-center space-x-2 mb-3">
                   <Star className="h-5 w-5 text-primary fill-primary" />
                   <h2 className="text-lg font-semibold text-foreground">
-                    Favorite Stations
+                    {t('favorite.stations')}
                   </h2>
                 </div>
                 <div className="space-y-3">
@@ -181,7 +212,7 @@ const Index = () => {
                 <div className="flex items-center space-x-2 mb-3">
                   <MapPin className="h-5 w-5 text-muted-foreground" />
                   <h2 className="text-lg font-semibold text-foreground">
-                    Nearby Stations
+                    {t('nearby.stations')}
                   </h2>
                 </div>
                 <div className="space-y-3">
@@ -203,14 +234,13 @@ const Index = () => {
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <MapPin className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium text-foreground mb-2">
-                  No stations found
+                  {t('no.stations.found')}
                 </h3>
                 <p className="text-muted-foreground max-w-sm mb-4">
-                  No transport stations found within 1km of your location.
-                  Try searching for a specific station.
+                  {t('no.stations.description')}
                 </p>
                 <Button onClick={() => setShowSearch(true)}>
-                  Search Stations
+                  {t('search.stations')}
                 </Button>
               </div>
             )}

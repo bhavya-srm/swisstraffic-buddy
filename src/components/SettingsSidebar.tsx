@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useTheme } from 'next-themes';
-import { useState } from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface SettingsSidebarProps {
   open: boolean;
@@ -13,7 +13,7 @@ interface SettingsSidebarProps {
 
 export const SettingsSidebar = ({ open, onOpenChange }: SettingsSidebarProps) => {
   const { theme, setTheme } = useTheme();
-  const [isGerman, setIsGerman] = useState(false);
+  const { isGerman, setIsGerman, t } = useLanguage();
 
   const toggleDarkMode = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -29,10 +29,10 @@ export const SettingsSidebar = ({ open, onOpenChange }: SettingsSidebarProps) =>
         <SheetHeader>
           <SheetTitle className="flex items-center space-x-2">
             <Settings className="h-5 w-5" />
-            <span>{isGerman ? 'Einstellungen' : 'Settings'}</span>
+            <span>{t('settings.title')}</span>
           </SheetTitle>
           <SheetDescription>
-            {isGerman ? 'Passen Sie Ihre App-Einstellungen an' : 'Customize your app preferences'}
+            {t('settings.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -47,13 +47,10 @@ export const SettingsSidebar = ({ open, onOpenChange }: SettingsSidebarProps) =>
               )}
               <div>
                 <Label htmlFor="dark-mode" className="text-sm font-medium">
-                  {isGerman ? 'Dunkler Modus' : 'Dark Mode'}
+                  {t('dark.mode')}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  {isGerman 
-                    ? 'Wechseln Sie zu einem dunkleren Design' 
-                    : 'Switch to a darker theme'
-                  }
+                  {t('dark.mode.description')}
                 </p>
               </div>
             </div>
@@ -70,13 +67,10 @@ export const SettingsSidebar = ({ open, onOpenChange }: SettingsSidebarProps) =>
               <Languages className="h-5 w-5 text-muted-foreground" />
               <div>
                 <Label htmlFor="language" className="text-sm font-medium">
-                  {isGerman ? 'Sprache' : 'Language'}
+                  {t('language')}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  {isGerman 
-                    ? 'Zwischen Englisch und Deutsch wechseln' 
-                    : 'Switch between English and German'
-                  }
+                  {t('language.description')}
                 </p>
               </div>
             </div>

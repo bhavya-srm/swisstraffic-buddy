@@ -80,7 +80,7 @@ export const SearchSidebar = ({ open, onOpenChange, onStationSelect }: SearchSid
                 placeholder="Search for a station..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 focus:ring-accent focus:border-accent"
               />
               {searchQuery && (
                 <Button
