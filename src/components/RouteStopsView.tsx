@@ -10,9 +10,10 @@ import type { Departure, RouteStop } from '@/types/transport';
 interface RouteStopsViewProps {
   departure: Departure;
   onBack: () => void;
+  onStationClick: (stationName: string) => void;
 }
 
-export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
+export const RouteStopsView = ({ departure, onBack, onStationClick }: RouteStopsViewProps) => {
   const [stops, setStops] = useState<RouteStop[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -133,7 +134,7 @@ export const RouteStopsView = ({ departure, onBack }: RouteStopsViewProps) => {
       ) : (
         <div className="space-y-3">
           {stops.map((stop, index) => (
-            <Card key={index}>
+            <Card key={index} className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => onStationClick(stop.name)}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">

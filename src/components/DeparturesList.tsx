@@ -62,7 +62,13 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
     setSelectedDeparture(departure);
   };
 
-  const handleBackFromRoute = () => {
+  const handleStationClick = (stationName: string) => {
+    // Navigate back to search and set the clicked station
+    onBack();
+    // You could also implement a callback to parent to handle station selection
+    console.log('Station clicked:', stationName);
+  };
+    const handleBackFromRoute = () => {
     setSelectedDeparture(null);
   };
 
@@ -72,6 +78,7 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
       <RouteStopsView
         departure={selectedDeparture}
         onBack={handleBackFromRoute}
+        onStationClick={handleStationClick}
       />
     );
   }
