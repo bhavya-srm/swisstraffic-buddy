@@ -86,8 +86,24 @@ const Index = () => {
     ];
   })();
 
-  const handleStationSelect = (station: Station) => {
-    setSelectedStation(station);
+  const handleStationSelect = (station: Station | string) => {
+    if (typeof station === 'string') {
+      // Handle station name string - search for the station
+      TransportAPI.searchStations(station).then(stations => {
+        if (stations.length > 0) {
+          setSelectedStation(stations[0]);
+        }
+      }).catch(error => {
+        console.error('Error finding station:', error);
+        toast({
+          title: "Error",
+          description: "Failed to find station. Please try again.",
+          variant: "destructive",
+        });
+      });
+    } else {
+      setSelectedStation(station);
+    }
   };
 
   const handleBackToList = () => {
@@ -101,6 +117,7 @@ const Index = () => {
           <DeparturesList
             station={selectedStation}
             onBack={handleBackToList}
+            onStationSelect={handleStationSelect}
           />
         </div>
       </div>

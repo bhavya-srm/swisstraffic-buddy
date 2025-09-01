@@ -11,9 +11,10 @@ import type { Station, Departure } from '@/types/transport';
 interface DeparturesListProps {
   station: Station;
   onBack: () => void;
+  onStationSelect?: (stationName: string) => void;
 }
 
-export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
+export const DeparturesList = ({ station, onBack, onStationSelect }: DeparturesListProps) => {
   const [departures, setDepartures] = useState<Departure[]>([]);
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,11 +63,32 @@ export const DeparturesList = ({ station, onBack }: DeparturesListProps) => {
     setSelectedDeparture(departure);
   };
 
-  const handleStationClick = (stationName: string) => {
-    // Navigate back to search and set the clicked station
-    onBack();
-    // You could also implement a callback to parent to handle station selection
-    console.log('Station clicked:', stationName);
+  const handleStationClick = async (stationName: string) => {
+    if (onStationSelect) {
+      try {
+        // Search for the station to get its details
+        const stations = await TransportAPI.searchStations(stationName);
+        if (stations.length > 0) {
+          const foundStation = stations[0];
+          onStationSelect(foundStation.name);
+          // Navigate to the new station
+          setSelectedDeparture(null);
+        } else {
+          toast({
+            title: "Station not found",
+            description: `Could not find station "${stationName}"`,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error('Error searching for station:', error);
+        toast({
+          title: "Error",
+          description: "Failed to search for station. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }
   };
     const handleBackFromRoute = () => {
     setSelectedDeparture(null);
